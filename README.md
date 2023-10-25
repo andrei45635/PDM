@@ -1,5 +1,3 @@
-# PDM
-
 # Spotube
 The app is designed to store songs that the user recently listened to.
 
