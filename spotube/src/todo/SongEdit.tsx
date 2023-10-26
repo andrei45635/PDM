@@ -14,10 +14,11 @@ import {getLogger} from '../core';
 import {SongContext} from './SongProvider';
 import {RouteComponentProps} from 'react-router';
 import {SongProps} from './SongProps';
-import {format} from 'date-fns';
 import moment from 'moment';
 
 const log = getLogger('SongEdit');
+const baseUrl = 'localhost:3000';
+const songUrl = `http://${baseUrl}/song`;
 
 interface SongEditProps extends RouteComponentProps<{
     id?: string;
@@ -31,12 +32,15 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
     const [releaseDate, setReleaseDate] = useState<Date | undefined>(undefined);
     const [playCount, setPlayCount] = useState(0);
     const [liked, setLiked] = useState(false);
-    const [song, setSong] = useState<SongProps>();
+    const [song, setSong] = useState<SongProps | undefined>(undefined);
 
     useEffect(() => {
         log('useEffect');
         const routeId = match.params.id || '';
-        const song = songs?.find(sg => sg.id === routeId);
+        const song = songs?.find(sg => parseInt(sg.id!) === parseInt(routeId)); //nu stiu ce se intampla aici, dar merge
+        for(let i = 0; i < songs?.length!; i++){
+            console.log(songs?.at(i), songs?.at(i)!.id, parseInt(routeId), parseInt(songs?.at(i)!.id!) === parseInt(routeId));
+        }
         setSong(song);
         if (song) {
             setTitle(song.title);
@@ -46,11 +50,12 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
             setLiked(song.liked);
         }
     }, [match.params.id, songs]);
+
     const handleSave = useCallback(() => {
         const editedSong = song ? {...song, title, author, releaseDate, playCount, liked} : {
             title,
             author,
-            releaseDate: releaseDate || new Date(),
+            releaseDate,
             playCount,
             liked
         };
@@ -72,12 +77,17 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
             <IonContent>
                 <IonInput value={title} onIonChange={e => setTitle(e.detail.value || '')}/>
                 <IonInput value={author} onIonChange={e => setAuthor(e.detail.value || '')}/>
-                <IonInput class="input"
-                          value={releaseDate ? format(new Date(releaseDate), 'dd/MM/yyyy') : ''}
-                          onIonChange={e => {
-                              const inputDate = moment(e.detail.value, 'dd/MM/yyyy').toDate();
-                              setReleaseDate(inputDate || '');
-                          }}
+                <IonInput
+                    class="input"
+                    value={releaseDate ? moment(releaseDate).format('DD-MM-YYYY') : ''}
+                    onIonChange={(e) => {
+                        if (e.detail.value) {
+                            const inputDate = new Date(moment(e.detail.value, "DD-MM-YYYY").toISOString());
+                            setReleaseDate(inputDate);
+                        } else {
+                            setReleaseDate(undefined);
+                        }
+                    }}
                 />
                 <IonInput
                     type="number"
@@ -101,3 +111,6 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
 };
 
 export default SongEdit;
+
+
+

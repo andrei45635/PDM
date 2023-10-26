@@ -79,7 +79,8 @@ router.get('/song/:id', async (ctx) => {
 
 const createSong = async (ctx) => {
     const song = ctx.request.body;
-    if (!song.title || !song.releaseDate || !song.playCount) { // validation
+    //if (!song.title || !song.releaseDate || !song.playCount) { // validation
+    if (song.title.length === 0 || song.releaseDate.toString().length === 0 || song.playCount < 0) { // validation
         ctx.response.body = {message: 'Invalid song!'};
         ctx.response.status = 400; //  BAD REQUEST
         return;

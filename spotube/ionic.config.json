@@ -1,0 +1,7 @@
+{
+  "name": "Spotube",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

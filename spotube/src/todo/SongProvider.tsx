@@ -163,7 +163,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
     return () => {
       log('wsEffect - disconnecting');
       canceled = true;
-      closeWebSocket(); // No need to pass an error argument here.
+      closeWebSocket();
     }
   }
 

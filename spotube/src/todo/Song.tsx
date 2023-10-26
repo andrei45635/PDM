@@ -15,7 +15,7 @@ const Song: React.FC<SongPropsExt> = ({ id, title, author, releaseDate, playCoun
       <IonLabel>
           <h2>{title}</h2>
           <p>{`Author: ${author}`}</p>
-          <p>{`Release Date: ${releaseDate}`}</p>
+          <p>{`Release Date: ${releaseDate?.toString()}`}</p>
           <p>{`Play Count: ${playCount}`}</p>
           <p>{`Liked: ${liked ? 'True' : 'False'}`}</p>
       </IonLabel>

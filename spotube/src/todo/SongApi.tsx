@@ -39,7 +39,7 @@ export const createSong: (song: SongProps) => Promise<SongProps[]> = song => {
   return withLogs(axios.post(songUrl, song, config), 'createSong');
 }
 
-export const updateSong: (song: SongProps) => Promise<SongProps[]> = song => {
+export const updateSong: (song: SongProps) => Promise<SongProps[]> = async song => {
   return withLogs(axios.put(`${songUrl}/${song.id}`, song, config), 'updateSong');
 }
 
