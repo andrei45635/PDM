@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, {useCallback, useContext, useEffect, useReducer} from 'react';
 import PropTypes from 'prop-types';
 import { getLogger } from '../core';
 import { SongProps } from './SongProps';
 import { createSong, getSongs, newWebSocket, updateSong } from './SongApi';
+import { AuthContext } from '../auth';
 
 const log = getLogger('SongProvider');
 
@@ -69,11 +70,12 @@ interface SongProviderProps {
 }
 
 export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
+  const {token} = useContext(AuthContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { songs, fetching, fetchingError, saving, savingError } = state;
 
-  useEffect(getSongsEffect, []);
-  useEffect(wsEffect, []);
+  useEffect(getSongsEffect, [token]);
+  useEffect(wsEffect, [token]);
 
   const saveSong = useCallback<SaveSongFn>(saveSongCallback, []);
   const value = { songs, fetching, fetchingError, saving, savingError, saveSong };
@@ -97,7 +99,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
       try {
         log('fetchSongs started');
         dispatch({ type: FETCH_SONGS_STARTED });
-        const songs = await getSongs();
+        const songs = await getSongs(token);
         console.log('SONGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', songs);
         log('fetchSongs succeeded');
         if (!canceled) {
@@ -116,7 +118,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
     try {
       log('saveSong started');
       dispatch({ type: SAVE_SONG_STARTED });
-      const savedSong = await (song.id ? updateSong(song) : createSong(song));
+      const savedSong = await (song.id ? updateSong(token, song) : createSong(token, song));
       log('saveSong succeeded');
       dispatch({ type: SAVE_SONG_SUCCEEDED, payload: { song: savedSong } });
     } catch (error) {
@@ -149,7 +151,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
   function wsEffect() {
     let canceled = false;
     log('wsEffect - connecting');
-    const closeWebSocket = newWebSocket(message => {
+    const closeWebSocket = newWebSocket(token, message => {
       if (canceled) {
         return;
       }

@@ -1,7 +1,8 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
     IonButton,
-    IonButtons, IonCheckbox,
+    IonButtons,
+    IonCheckbox,
     IonContent,
     IonHeader,
     IonInput,
@@ -17,8 +18,6 @@ import {SongProps} from './SongProps';
 import moment from 'moment';
 
 const log = getLogger('SongEdit');
-const baseUrl = 'localhost:3000';
-const songUrl = `http://${baseUrl}/song`;
 
 interface SongEditProps extends RouteComponentProps<{
     id?: string;
@@ -37,7 +36,7 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
     useEffect(() => {
         log('useEffect');
         const routeId = match.params.id || '';
-        const song = songs?.find(sg => parseInt(sg.id!) === parseInt(routeId)); //nu stiu ce se intampla aici, dar merge
+        const song = songs?.find(sg => parseInt(sg.id!) === parseInt(routeId));
         for(let i = 0; i < songs?.length!; i++){
             console.log(songs?.at(i), songs?.at(i)!.id, parseInt(routeId), parseInt(songs?.at(i)!.id!) === parseInt(routeId));
         }
@@ -74,21 +73,60 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
+            {/*<IonContent>*/}
+            {/*    <IonInput value={title} onIonChange={e => setTitle(e.detail.value || '')}/>*/}
+            {/*    <IonInput value={author} onIonChange={e => setAuthor(e.detail.value || '')}/>*/}
+            {/*    <IonInput*/}
+            {/*        class="input"*/}
+            {/*        value={releaseDate ? moment(releaseDate).format('MM-DD-YYYY') : ''}*/}
+            {/*        onIonChange={(e) => {*/}
+            {/*            if (e.detail.value) {*/}
+            {/*                const inputDate = new Date(moment(e.detail.value, "MM-DD-YYYY").toLocaleString());*/}
+            {/*                setReleaseDate(inputDate);*/}
+            {/*            } else {*/}
+            {/*                setReleaseDate(undefined);*/}
+            {/*            }*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*    <IonInput*/}
+            {/*        type="number"*/}
+            {/*        value={playCount.toString()}*/}
+            {/*        onIonChange={e => {*/}
+            {/*            const inputVal: string = e.detail.value!;*/}
+            {/*            const parsedCount = parseInt(inputVal, 10);*/}
+            {/*            if (!isNaN(parsedCount)) {*/}
+            {/*                setPlayCount(parsedCount);*/}
+            {/*            }*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*    <IonCheckbox checked={liked} onIonChange={e => setLiked(e.detail.checked)}/>*/}
+            {/*    <IonLoading isOpen={saving}/>*/}
+            {/*    {savingError && (*/}
+            {/*        <div>{savingError.message || 'Failed to save song'}</div>*/}
+            {/*    )}*/}
+            {/*</IonContent>*/}
             <IonContent>
-                <IonInput value={title} onIonChange={e => setTitle(e.detail.value || '')}/>
-                <IonInput value={author} onIonChange={e => setAuthor(e.detail.value || '')}/>
+                <label className="input-label">Title</label>
+                <IonInput value={title} onIonChange={e => setTitle(e.detail.value || '')} class="input" />
+
+                <label className="input-label">Author</label>
+                <IonInput value={author} onIonChange={e => setAuthor(e.detail.value || '')} class="input" />
+
+                <label className="input-label">Release Date</label>
                 <IonInput
                     class="input"
-                    value={releaseDate ? moment(releaseDate).format('DD-MM-YYYY') : ''}
+                    value={releaseDate ? moment(releaseDate).format('MM-DD-YYYY') : ''}
                     onIonChange={(e) => {
                         if (e.detail.value) {
-                            const inputDate = new Date(moment(e.detail.value, "DD-MM-YYYY").toISOString());
+                            const inputDate = new Date(moment(e.detail.value, "MM-DD-YYYY").toLocaleString());
                             setReleaseDate(inputDate);
                         } else {
                             setReleaseDate(undefined);
                         }
                     }}
                 />
+
+                <label className="input-label">Play Count</label>
                 <IonInput
                     type="number"
                     value={playCount.toString()}
@@ -99,11 +137,17 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                             setPlayCount(parsedCount);
                         }
                     }}
+                    class="input"
                 />
-                <IonCheckbox checked={liked} onIonChange={e => setLiked(e.detail.checked)}/>
+
+                <div className="checkbox-label">
+                    <span>  Liked  </span>
+                    <IonCheckbox checked={liked} onIonChange={e => setLiked(e.detail.checked)} />
+                </div>
+
                 <IonLoading isOpen={saving}/>
                 {savingError && (
-                    <div>{savingError.message || 'Failed to save song'}</div>
+                    <div className="error-message">{savingError.message || 'Failed to save song'}</div>
                 )}
             </IonContent>
         </IonPage>

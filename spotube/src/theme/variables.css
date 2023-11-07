@@ -1,6 +1,57 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+.input-label {
+  font-size: 16px;
+  color: lightblue;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+}
+
+.input-container {
+  margin-bottom: 16px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  color: white;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input[type="number"] {
+  width: 100%;
+}
+
+.input:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.6);
+}
+
+.checkbox-label {
+  font-size: 14px;
+  color: lightblue;
+  display: flex;
+  align-items: center;
+}
+
+.loading-text {
+  font-size: 16px;
+  color: #333;
+  margin-top: 16px;
+}
+
+.error-message {
+  font-size: 16px;
+  color: #ff0000;
+  margin-top: 16px;
+}
+
+
+
 .page {
   background-color: #f8f8f8
 }
@@ -11,11 +62,7 @@ http://ionicframework.com/docs/theming/ */
 .content {
   padding: 20px
 }
-/*.input {*/
-/*  background-color: #fff;*/
-/*  border-radius: 5px;*/
-/*  margin-bottom: 10px*/
-/*}*/
+
 .checkbox {
   margin-top: 10px
 }
