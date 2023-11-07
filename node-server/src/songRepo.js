@@ -12,7 +12,7 @@ export class SongRepo {
             driver: sqlite3.Database
         });
 
-        await this.db.exec(`
+        await this.db.run(`
             create table if not exists songs
             (
                 id          integer primary key autoincrement,
@@ -27,7 +27,11 @@ export class SongRepo {
     };
 
     async getAll(userId) {
-        return await this.db.all("select * from songs where userId = ?", [userId]);
+        console.log('database 2', userId);
+        const { param } = userId;
+        console.log('database 2', userId.userId);
+        console.log(await this.db.all("select * from songs where userId = ?", param));
+        return await this.db.all("select * from songs where userId = ?", [userId.userId]);
     }
 
     async getSongById(songId) {
@@ -39,7 +43,7 @@ export class SongRepo {
         if (!title || !author) {
             throw new Error("Invalid data.");
         }
-        await this.db.insert("insert into songs (title, author, releaseDate, playCount, liked, userId) values (?, ? ,?, ?, ?, ?)",
+        await this.db.run("insert into songs (title, author, releaseDate, playCount, liked, userId) values (?, ? ,?, ?, ?, ?)",
             [title, author, releaseDate, playCount, liked, userId]);
 
         const lastId = await this.db.get("select last_insert_rowid() as lastId");

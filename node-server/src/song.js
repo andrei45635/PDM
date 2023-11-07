@@ -1,14 +1,14 @@
 import Router from "koa-router";
 import {broadcast} from "./wss.js";
-import {SongRepo} from "./songRepo.js";
-
-const songRepo = new SongRepo({filename: "./db/songs.db"});
+import {songRepo} from "./songRepo.js";
 
 export const songRouter = new Router();
 
 songRouter.get("/", async (ctx) => {
     const userId = ctx.state.user._id;
+    console.log('database', ctx.state.user);
     const songs = await songRepo.getAll({userId});
+    console.log(songs);
     songs.forEach(song => song.id = song.id.toString());
     ctx.response.body = songs;
     ctx.response.status = 200; // ok

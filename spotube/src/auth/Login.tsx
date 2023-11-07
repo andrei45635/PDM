@@ -19,7 +19,7 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
         log('Password changed:', e.detail.value);
         setState({
             ...state,
-            password: e.detail.value || ''
+            password: e.detail.value || '',
         })
     }, [state]);
     log("RANDOM STATE", state);

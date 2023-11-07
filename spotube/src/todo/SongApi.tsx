@@ -5,11 +5,12 @@ import { SongProps } from './SongProps';
 const songUrl = `http://${baseUrl}/api/song`;
 
 export const getSongs: (token: string) => Promise<SongProps[]> = token => {
-  console.log("GETTING SONGS");
+  console.log("GETTING SONGS", token);
   return withLogs(axios.get(songUrl, authConfig(token)), 'getSongs');
 }
 
 export const createSong: (token: string, song: SongProps) => Promise<SongProps[]> = (token, song) => {
+  console.log("CREATING SONG!!!!", token, song);
   return withLogs(axios.post(songUrl, song, authConfig(token)), 'createSong');
 }
 
