@@ -28,7 +28,6 @@ export const authRouter = new Router();
 authRouter.post("/signup", async (ctx) => {
     try {
         const user = ctx.request.body;
-        console.log(user);
         const existingUser = await userStore.findOne({username: user.username});
         if (existingUser) {
             ctx.response.body = {error: "Existing user"};

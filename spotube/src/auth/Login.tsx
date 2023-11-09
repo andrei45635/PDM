@@ -3,6 +3,7 @@ import {RouteComponentProps} from 'react-router';
 import {IonButton, IonContent, IonHeader, IonInput, IonLoading, IonPage, IonTitle, IonToolbar} from '@ionic/react';
 import {AuthContext} from './AuthProvider';
 import {getLogger} from '../core';
+import {Redirect} from "react-router-dom";
 
 const log = getLogger('Login');
 
@@ -42,6 +43,9 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
             history.push('/');
         }
     }, [isAuthenticated]);
+    if (isAuthenticated) {
+        return <Redirect to={{ pathname: '/' }} />
+    }
     return (
         <IonPage>
             <IonHeader>

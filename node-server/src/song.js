@@ -4,13 +4,13 @@ import {songRepo} from "./songRepo.js";
 
 export const songRouter = new Router();
 
-songRouter.get("/", async (ctx) => {
+const pageSize = 10;
+
+songRouter.get("/:page", async (ctx) => {
     const userId = ctx.state.user._id;
-    console.log('database', ctx.state.user);
     const songs = await songRepo.getAll({userId});
-    console.log(songs);
     songs.forEach(song => song.id = song.id.toString());
-    ctx.response.body = songs;
+    ctx.response.body = songs.slice((ctx.params.page - 1) * pageSize, ctx.params.page * pageSize);
     ctx.response.status = 200; // ok
 });
 
@@ -49,16 +49,19 @@ songRouter.post("/", async ctx => await createSong(ctx, ctx.request.body, ctx.re
 songRouter.put("/:id", async ctx => {
     const song = ctx.request.body;
     const id = ctx.params.id;
-    const songId = song._id;
+    const songId = song.id;
     const response = ctx.response;
     if (songId && songId !== id) {
         response.body = {message: "Param id and body _id should be the same"};
         response.status = 400; // bad request
         return;
     }
+    console.log(song.id);
     if (!songId) {
+        console.log("creating", song);
         await createSong(ctx, song, response);
     } else {
+        console.log("updating", song)
         const userId = ctx.state.user._id;
         song.userId = userId;
         const updatedCount = await songRepo.updateSong({_id: parseInt(id)}, song);

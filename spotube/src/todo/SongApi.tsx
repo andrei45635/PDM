@@ -4,9 +4,14 @@ import { SongProps } from './SongProps';
 
 const songUrl = `http://${baseUrl}/api/song`;
 
-export const getSongs: (token: string) => Promise<SongProps[]> = token => {
+// export const getSongs: (token: string) => Promise<SongProps[]> = token => {
+//   console.log("GETTING SONGS", token);
+//   return withLogs(axios.get(songUrl, authConfig(token)), 'getSongs');
+// }
+
+export const getSongs: (token: string, page: number) => Promise<SongProps[]> = (token, page) => {
   console.log("GETTING SONGS", token);
-  return withLogs(axios.get(songUrl, authConfig(token)), 'getSongs');
+  return withLogs(axios.get(`${songUrl}/${page}`, authConfig(token)), 'getSongs');
 }
 
 export const createSong: (token: string, song: SongProps) => Promise<SongProps[]> = (token, song) => {

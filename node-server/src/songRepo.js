@@ -27,10 +27,6 @@ export class SongRepo {
     };
 
     async getAll(userId) {
-        console.log('database 2', userId);
-        const { param } = userId;
-        console.log('database 2', userId.userId);
-        console.log(await this.db.all("select * from songs where userId = ?", param));
         return await this.db.all("select * from songs where userId = ?", [userId.userId]);
     }
 

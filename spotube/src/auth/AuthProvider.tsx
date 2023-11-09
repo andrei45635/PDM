@@ -2,12 +2,13 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {getLogger} from '../core';
 import {login as loginApi, signUp as signUpApi, logout as logoutApi} from './authApi';
+import {Preferences} from "@capacitor/preferences";
 
 const log = getLogger('AuthProvider');
 
 type LoginFn = (username?: string, password?: string) => void;
 type SignUpFn = (username?: string, password?: string) => void;
-type LogoutFn = (username?: string, password?: string) => void;
+type LogoutFn = () => void;
 
 export interface AuthState {
     authenticationError: Error | null;
@@ -15,6 +16,7 @@ export interface AuthState {
     isAuthenticating: boolean;
     login?: LoginFn;
     signUp?: SignUpFn;
+    logout?: LogoutFn;
     pendingAuthentication?: boolean;
     pendingSignUp?: boolean;
     username?: string;
@@ -43,8 +45,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const login = useCallback<LoginFn>(loginCallback, []);
     const signUp = useCallback<SignUpFn>(signUpCallback, []);
     const logout = useCallback<LogoutFn>(logoutCallback, []);
-    const usernameRef = useRef<string | undefined>(undefined);
-    const passwordRef = useRef<string | undefined>(undefined);
     useEffect(authenticationEffect, [pendingAuthentication, pendingSignUp]);
     const value = {isAuthenticated, login, signUp, logout, isAuthenticating, pendingSignUp, authenticationError, token};
     log('render');
@@ -77,8 +77,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         log('adasdasdadasdasdadadadadada', state);
     }
 
-    function logoutCallback(username?: string, password?: string): void {
+    function logoutCallback(): void {
         log('logout');
+        Preferences.remove({key: "user"});
+        localStorage.removeItem("token");
         setState({
             ...initialState
         });
@@ -116,6 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
                 if (canceled) {
                     return;
                 }
+                localStorage.setItem("token", token);
                 log('authenticate succeeded');
                 setState({
                     ...state,
