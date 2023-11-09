@@ -41,7 +41,8 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [state, setState] = useState<AuthState>(initialState);
-    const {isAuthenticated, isAuthenticating, authenticationError, pendingAuthentication, pendingSignUp, token} = state;
+    const {isAuthenticated, isAuthenticating, authenticationError, pendingAuthentication, pendingSignUp} = state;
+    const token = localStorage.getItem("token")!;
     const login = useCallback<LoginFn>(loginCallback, []);
     const signUp = useCallback<SignUpFn>(signUpCallback, []);
     const logout = useCallback<LogoutFn>(logoutCallback, []);
@@ -94,6 +95,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         }
 
         async function authenticate() {
+            if(token){
+                setState({
+                    ...state,
+                    token: token,
+                    isAuthenticating: false,
+                    pendingAuthentication: false,
+                    pendingSignUp: false,
+                    isAuthenticated: true
+                });
+            }
+
             if (!pendingAuthentication && !pendingSignUp) {
                 log('authenticate, !pendingAuthentication && !pendingSignUp, return');
                 return;
