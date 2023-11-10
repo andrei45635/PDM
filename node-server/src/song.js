@@ -35,6 +35,7 @@ songRouter.get("/:id", async (ctx) => {
 const createSong = async (ctx, song, response) => {
     try {
         song.userId = ctx.state.user._id;
+        console.log("userId", song.userId);
         response.body = await songRepo.addSong(song);
         response.status = 201; // created
         broadcast(song.userId, {type: "created", payload: song});
@@ -64,6 +65,7 @@ songRouter.put("/:id", async ctx => {
         console.log("updating", song)
         const userId = ctx.state.user._id;
         song.userId = userId;
+        console.log("userId", song.userId);
         const updatedCount = await songRepo.updateSong({_id: parseInt(id)}, song);
         if (updatedCount === 1) {
             response.body = song;

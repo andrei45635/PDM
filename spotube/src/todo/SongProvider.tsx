@@ -1,12 +1,9 @@
-import React, {useCallback, useContext, useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer} from 'react';
 import PropTypes from 'prop-types';
 import {getLogger} from '../core';
 import {SongProps} from './SongProps';
 import {createSong, getSongs, newWebSocket, updateSong} from './SongApi';
-import {AuthContext} from '../auth';
 import {useNetwork} from "../network/useNetwork";
-import * as net from "net";
-import Song from "./Song";
 
 const log = getLogger('SongProvider');
 
@@ -188,6 +185,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({children}) => {
             dispatch({type: SAVE_SONG_STARTED});
             if (!networkStatus.connected) {
                 log("Offline, can't send songs to server");
+                alert("You're offline. The song has been added to the list, but it hasn't been synced with the server just yet. Don't worry, you didn't lose any data.");
                 const songId = song.id || nextId(songs).toString();
                 await localStorage.setItem(songId, JSON.stringify({...song, isNew: song.id === undefined}));
                 dispatch({type: SAVE_SONG_SUCCEEDED, payload: {song: song}});

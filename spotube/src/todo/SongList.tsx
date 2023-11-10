@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {
+    IonButton,
     IonCheckbox,
     IonContent,
     IonFab,
@@ -55,6 +56,15 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
         });
     }
 
+    const isFilterApplied = () => titleFilter || authorFilter || likedFilter;
+
+    // Function to clear all filters
+    const clearFilters = () => {
+        setTitleFilter("");
+        setAuthorFilter("");
+        setLikedFilter(false);
+    };
+
     log('render');
 
     return (
@@ -69,6 +79,7 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                 <IonLoading isOpen={fetching} message="Fetching songs"/>
                 <IonRow>
                     <IonSearchbar
+                        placeholder="Title"
                         value={titleFilter}
                         debounce={100}
                         onIonChange={e => setTitleFilter(e.detail.value!)}
@@ -76,6 +87,7 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                     >
                     </IonSearchbar>
                     <IonSearchbar
+                        placeholder="Author"
                         value={authorFilter}
                         debounce={100}
                         onIonChange={e => setAuthorFilter(e.detail.value!)}
@@ -83,11 +95,19 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                     >
                     </IonSearchbar>
                     <IonItem style={{width:"25%"}}>
-                        <IonCheckbox
-                            checked={likedFilter}
-                            onIonChange={e => setLikedFilter(e.detail.checked ?? false)}
-                        />
+                        Liked
+                        <div style={{margin:"15px"}}>
+                            <IonCheckbox
+                                checked={likedFilter}
+                                onIonChange={e => setLikedFilter(e.detail.checked ?? false)}
+                            />
+                        </div>
+
                     </IonItem>
+                    {isFilterApplied() && (
+                        <IonItem style={{ margin: "5px"}}>
+                            <IonButton onClick={clearFilters}>Clear Filters</IonButton>
+                        </IonItem>)}
                 </IonRow>
                 {songs && songs.length > 0 && (
                     <IonList>

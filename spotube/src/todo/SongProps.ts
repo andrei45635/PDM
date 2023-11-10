@@ -15,7 +15,6 @@ export const filterSongs = (
     const filterFn = (song: SongProps) =>
         (!titleFilter || song.title.includes(String(titleFilter))) &&
         (!authorFilter || song.author.includes(authorFilter)) &&
-        (!likedFilter || song.liked === likedFilter)
-
+        (!likedFilter || song.liked == likedFilter)
     return songs.filter(filterFn);
 };
