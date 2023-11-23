@@ -21,7 +21,10 @@ export class SongRepo {
                 releaseDate text,
                 playCount   integer,
                 liked       integer,
-                userId      text
+                userId      text,
+                latitude    integer,
+                longitude   integer, 
+                photoBase64 text
             )
         `);
     };
@@ -35,12 +38,12 @@ export class SongRepo {
     }
 
     async addSong(song) {
-        const {title, author, releaseDate, playCount, liked, userId} = song;
+        const {title, author, releaseDate, playCount, liked, userId, latitude, longitude} = song;
         if (!title || !author) {
             throw new Error("Invalid data.");
         }
-        await this.db.run("insert into songs (title, author, releaseDate, playCount, liked, userId) values (?, ? ,?, ?, ?, ?)",
-            [title, author, releaseDate, playCount, liked, userId]);
+        await this.db.run("insert into songs (title, author, releaseDate, playCount, liked, userId, latitude, longitude) values (?, ? ,?, ?, ?, ?, ?, ?)",
+            [title, author, releaseDate, playCount, liked, userId, latitude, longitude]);
 
         const lastId = await this.db.get("select last_insert_rowid() as lastId");
         song.id = lastId.toString();
@@ -53,9 +56,11 @@ export class SongRepo {
     }
 
     async updateSong(songId, song) {
-        const {title, author, releaseDate, playCount, liked} = song;
-        const result = await this.db.run("update songs set title = ?, author = ? , releaseDate = ?, playCount = ?, liked = ? where id = ?",
-            [title, author, releaseDate, playCount, liked, songId]);
+        console.log('IN REPO DB', song);
+        //const {title, author, releaseDate, playCount, liked, latitude, longitude, photoBase64} = song;
+        const {title, author, releaseDate, playCount, liked, latitude, longitude} = song;
+        const result = await this.db.run("update songs set title = ?, author = ? , releaseDate = ?, playCount = ?, liked = ?, latitude = ?, longitude = ? where id = ?",
+            [title, author, releaseDate, playCount, liked, songId, latitude, longitude]);
         return 1;
     }
 }

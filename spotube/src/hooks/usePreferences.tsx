@@ -1,10 +1,20 @@
-import { useEffect } from 'react';
+import {useCallback, useEffect} from 'react';
 import { Preferences } from '@capacitor/preferences';
 
 export const usePreferences = () => {
   useEffect(() => {
     runPreferencesDemo();
   }, []);
+
+  const get = useCallback<(key: string) => Promise<string | null>>(
+      key => Preferences.get({ key }).then(result => result.value),
+      []
+  );
+
+  const set = useCallback<(key: string, value: string) => Promise<void>>(
+      (key, value) => Preferences.set({ key, value }),
+      []
+  );
 
   function runPreferencesDemo() {
     (async () => {
@@ -36,4 +46,6 @@ export const usePreferences = () => {
       await Preferences.clear();
     })();
   }
+
+  return {get, set};
 };

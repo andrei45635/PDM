@@ -65,6 +65,8 @@ songRouter.put("/:id", async ctx => {
         console.log("updating", song)
         const userId = ctx.state.user._id;
         song.userId = userId;
+        song.latitude = song.latitude || 0;
+        song.longitude = song.longitude || 0;
         console.log("userId", song.userId);
         const updatedCount = await songRepo.updateSong({_id: parseInt(id)}, song);
         if (updatedCount === 1) {

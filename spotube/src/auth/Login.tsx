@@ -4,6 +4,7 @@ import {IonButton, IonContent, IonHeader, IonInput, IonLoading, IonPage, IonTitl
 import {AuthContext} from './AuthProvider';
 import {getLogger} from '../core';
 import {Redirect} from "react-router-dom";
+import {MyModal} from "../components/MyModal";
 
 const log = getLogger('Login');
 

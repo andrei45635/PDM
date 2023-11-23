@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {
     IonButton,
@@ -7,21 +7,26 @@ import {
     IonFab,
     IonFabButton,
     IonHeader,
-    IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem,
-    IonList, IonLoading,
-    IonPage, IonRow, IonSearchbar,
-    IonTitle,
-    IonToolbar
+    IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonItem,
+    IonList,
+    IonLoading,
+    IonPage,
+    IonRow,
+    IonSearchbar
 } from '@ionic/react';
 import {add} from 'ionicons/icons';
 import {getLogger} from '../core';
 import {SongContext} from './SongProvider';
 import Song from "./Song";
 import SpotubeToolbar from "../components/SpotubeToolbar";
-import {filterSongs, SongProps} from "./SongProps";
-import {useNetwork} from "../network/useNetwork";
-import {usePreferences} from "../network/usePreferences";
+import {filterSongs} from "./SongProps";
+import {useNetwork} from "../hooks/useNetwork";
+import {usePreferences} from "../hooks/usePreferences";
 import {getSongs} from "./SongApi";
+import {MyModal} from "../components/MyModal";
 
 const log = getLogger('SongList');
 
@@ -56,6 +61,7 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
         });
     }
 
+    const editLocationButtonRef = useRef<HTMLButtonElement | null>(null);
     const isFilterApplied = () => titleFilter || authorFilter || likedFilter;
 
     // Function to clear all filters
@@ -111,7 +117,7 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                 </IonRow>
                 {songs && songs.length > 0 && (
                     <IonList>
-                        {filterSongs(songs, titleFilter, authorFilter, likedFilter ?? false).map(({id, title, author, releaseDate, playCount, liked}) =>
+                        {filterSongs(songs, titleFilter, authorFilter, likedFilter ?? false).map(({id, title, author, releaseDate, playCount, liked, latitude, longitude}) =>
                             <Song
                                 key={id}
                                 id={id}
@@ -120,6 +126,8 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                                 releaseDate={releaseDate}
                                 playCount={playCount}
                                 liked={liked}
+                                latitude={latitude}
+                                longitude={longitude}
                                 onEdit={id => history.push(`/song/${id}`)}
                             />
                         )}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {getLogger} from '../core';
 import {SongProps} from './SongProps';
 import {createSong, getSongs, newWebSocket, updateSong} from './SongApi';
-import {useNetwork} from "../network/useNetwork";
+import {useNetwork} from "../hooks/useNetwork";
 
 const log = getLogger('SongProvider');
 
@@ -108,7 +108,10 @@ export function sendSongs(token: string, networkStatus: any){
                 author: songData.author,
                 releaseDate: songData.releaseDate,
                 playCount: songData.playCount,
-                liked: songData.liked
+                liked: songData.liked,
+                latitude: songData.latitude,
+                longitude: songData.longitude,
+                photoBase64: songData.photoBase64
             };
 
             if (songData.isNew)

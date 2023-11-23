@@ -4,7 +4,20 @@ export interface SongProps {
     author: string,
     releaseDate: Date | undefined,
     playCount: number,
-    liked: boolean
+    liked: boolean,
+    latitude: number,
+    longitude: number,
+    //photoBase64: string
+}
+
+export const defaultSong = {
+    id: "",
+    title: "Default",
+    author: "Default",
+    releaseDate: "",
+    latitude: 0,
+    longitude: 0,
+    photoBase64: ""
 }
 
 export const filterSongs = (

@@ -1,9 +1,10 @@
 import {IonButton, IonTitle, IonToolbar} from '@ionic/react';
 import React, {useContext} from 'react';
-import {useNetwork} from "../network/useNetwork";
-import {usePreferences} from "../network/usePreferences";
-import {useAppState} from "../network/useAppState";
+import {useNetwork} from "../hooks/useNetwork";
+import {usePreferences} from "../hooks/usePreferences";
+import {useAppState} from "../hooks/useAppState";
 import {AuthContext} from "../auth";
+import {MyModal} from "./MyModal";
 
 const SpotubeToolbar: React.FC = () => {
     const {logout} = useContext(AuthContext);
@@ -56,6 +57,7 @@ const SpotubeToolbar: React.FC = () => {
                 <div>
                     <div style={styles.appState}>App state is {appState.isActive.toString()}</div>
                     <div style={styles.networkStatus}>Network status is {networkStatus.connected ? 'true' : 'false'} and the connection type is {networkStatus.connectionType.toString()}</div>
+                    {/*<MyModal/>*/}
                     <IonButton style={styles.logoutButton} expand="block" onClick={logout}>Logout</IonButton>
                 </div>
             </div>
