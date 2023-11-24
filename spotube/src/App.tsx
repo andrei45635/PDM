@@ -25,6 +25,7 @@ import {SongEdit, SongList} from "./todo";
 import {SongProvider} from "./todo/SongProvider";
 import { AuthProvider, Login, PrivateRoute } from './auth';
 import TestComponent from "./todo/TestComponent";
+import AnimationDemo from "./components/AnimationDemo";
 
 setupIonicReact();
 
@@ -34,6 +35,7 @@ const App: React.FC = () => (
             <IonRouterOutlet>
                 <AuthProvider>
                     <Route path="/login" component={Login} exact={true}/>
+                    <Route path="/test" component={AnimationDemo} exact={true}/>
                     <SongProvider>
                         <PrivateRoute path="/songs" component={SongList} exact={true}/>
                         <PrivateRoute path="/song" component={SongEdit} exact={true}/>

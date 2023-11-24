@@ -51,7 +51,6 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
         console.log("photoBase64 in useEffect:", photoBase64);
     }, [photoBase64]);
 
-
     useEffect(() => {
         log('useEffect');
         const routeId = match.params.id || '';
@@ -155,7 +154,10 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                                 {photos.map((photo, index) => (
                                     <IonCol size="3" key={index}>
                                         <IonImg
-                                            onClick={() => setPhotoAction(photo)}
+                                            onClick={() => {
+                                                setPhotoAction(photo);
+                                                console.log('taken photo', photo);
+                                            }}
                                             src={photo.webviewPath}
                                         />
                                     </IonCol>
@@ -172,19 +174,21 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                                     icon: save,
                                     role: "save",
                                     handler: () => {
-                                        const link = document.createElement("a");
-                                        link.href = photoAction?.webviewPath ?? "";
-                                        link.download = "image.png";
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        console.log("PHOTO BASE 64444444", photoAction?.webviewPath);
-                                        // setPhotoBase64(photoAction?.webviewPath!);
+                                        if(photoAction){
+                                            console.log('photoAction!!!!!!!', photoAction);
+                                            const link = document.createElement("a");
+                                            link.href = photoAction?.webviewPath ?? "";
+                                            link.download = "image.png";
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            console.log("PHOTO BASE 64444444", photoAction?.webviewPath);
 
-                                        localStorage.setItem("photo", photoAction?.webviewPath!);
-                                        setPhotoBase64(localStorage.getItem("photo")!);
-                                        console.log('setPhotoBase64', photoBase64);
-                                        document.removeChild(link);
-                                        setPhotoAction(undefined);
+                                            localStorage.setItem("photo", photoAction?.webviewPath!);
+                                            setPhotoBase64(photoAction?.webviewPath!.split(",")[1]);
+                                            console.log('setPhotoBase64', photoBase64);
+                                            document.removeChild(link);
+                                            setPhotoAction(undefined);
+                                        }
                                     }
                                 },
                                 {
@@ -217,7 +221,7 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                                 console.log("LONGITUDE!!!", e.latLng.lng());
                                 setLongitude(e.latLng.lat());
                                 setLatitude(e.latLng.lng());
-                                // setSong({...song, latitude: e.latLng.lat(), longitude: e.latLng.lng()});
+                                setMapVisible(true)
                             }
                         }
                         // @ts-ignore

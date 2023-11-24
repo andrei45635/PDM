@@ -38,12 +38,12 @@ export class SongRepo {
     }
 
     async addSong(song) {
-        const {title, author, releaseDate, playCount, liked, userId, latitude, longitude} = song;
+        const {title, author, releaseDate, playCount, liked, userId, latitude, longitude, photoBase64} = song;
         if (!title || !author) {
             throw new Error("Invalid data.");
         }
-        await this.db.run("insert into songs (title, author, releaseDate, playCount, liked, userId, latitude, longitude) values (?, ? ,?, ?, ?, ?, ?, ?)",
-            [title, author, releaseDate, playCount, liked, userId, latitude, longitude]);
+        await this.db.run("insert into songs (title, author, releaseDate, playCount, liked, userId, latitude, longitude, photoBase64) values (?, ? ,?, ?, ?, ?, ?, ?, ?)",
+            [title, author, releaseDate, playCount, liked, userId, latitude, longitude, photoBase64]);
 
         const lastId = await this.db.get("select last_insert_rowid() as lastId");
         song.id = lastId.toString();
@@ -58,14 +58,14 @@ export class SongRepo {
     async updateSong(songId, song) {
         console.log('IN REPO DB', song);
         //const {title, author, releaseDate, playCount, liked, latitude, longitude, photoBase64} = song;
-        const {title, author, releaseDate, playCount, liked, latitude, longitude} = song;
-        const result = await this.db.run("update songs set title = ?, author = ? , releaseDate = ?, playCount = ?, liked = ?, latitude = ?, longitude = ? where id = ?",
-            [title, author, releaseDate, playCount, liked, songId, latitude, longitude]);
+        const {title, author, releaseDate, playCount, liked, latitude, longitude, photoBase64} = song;
+        const result = await this.db.run("update songs set title = ?, author = ? , releaseDate = ?, playCount = ?, liked = ?, latitude = ?, longitude = ?, photoBase64 = ? where id = ?",
+            [title, author, releaseDate, playCount, liked, songId, latitude, longitude, photoBase64]);
         return 1;
     }
 }
 
-const songRepo = new SongRepo({filename: "C:\\Users\\GIGABYTE\\IdeaProjects\\PDM\\node-server\\db\\songs.db"});
+const songRepo = new SongRepo({filename: "C:\\Users\\z004tx9t\\Desktop\\PDM\\node-server\\db\\songs.db"});
 await songRepo.createTable();
 
 export {songRepo};

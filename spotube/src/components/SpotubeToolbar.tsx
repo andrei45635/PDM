@@ -1,5 +1,5 @@
-import {IonButton, IonTitle, IonToolbar} from '@ionic/react';
-import React, {useContext} from 'react';
+import {CreateAnimation, IonButton, IonTitle, IonToolbar} from '@ionic/react';
+import React, {useContext, useEffect, useRef} from 'react';
 import {useNetwork} from "../hooks/useNetwork";
 import {usePreferences} from "../hooks/usePreferences";
 import {useAppState} from "../hooks/useAppState";
@@ -10,9 +10,16 @@ const SpotubeToolbar: React.FC = () => {
     const {logout} = useContext(AuthContext);
     const {appState} = useAppState();
     const {networkStatus} = useNetwork();
+    const animationRef = useRef<CreateAnimation>(null);
     usePreferences();
     console.log('App state:', appState);
     console.log('Network status:', networkStatus);
+
+    useEffect(() => {
+        if (animationRef.current) {
+            animationRef.current.animation.play();
+        }
+    }, [animationRef]);
 
     const styles = {
         container: {
@@ -53,7 +60,19 @@ const SpotubeToolbar: React.FC = () => {
     return (
         <IonToolbar>
             <div>
-                <IonTitle>Spotube</IonTitle>
+                <CreateAnimation
+                    ref={animationRef}
+                    duration={1000}
+                    keyframes={[
+                        { offset: 0, transform: 'scale(1)', opacity: '1' },
+                        { offset: 0.5, transform: 'scale(1.2)', opacity: '0.8' },
+                        { offset: 1, transform: 'scale(1)', opacity: '1' },
+                    ]}
+                    iterations={Infinity}
+                    easing="ease-in-out"
+                >
+                    <h1 style={{ display: 'inline-block' , paddingLeft: '10px'}}>Spotube</h1>
+                </CreateAnimation>
                 <div>
                     <div style={styles.appState}>App state is {appState.isActive.toString()}</div>
                     <div style={styles.networkStatus}>Network status is {networkStatus.connected ? 'true' : 'false'} and the connection type is {networkStatus.connectionType.toString()}</div>

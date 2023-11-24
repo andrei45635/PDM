@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from 'react';
-import { CreateAnimation, createAnimation } from '@ionic/react';
-import { MyComponent } from './MyComponent';
+import React, {useEffect, useRef} from 'react';
+import {CreateAnimation, createAnimation} from '@ionic/react';
+import {MyComponent} from './MyComponent';
 import './AnimationDemo.css';
-import { MyModal } from './MyModal';
+import {MyModal} from "./MyModal";
 
 const AnimationDemo: React.FC = () => {
     const elCRef = useRef(null);
     const animationRef = useRef<CreateAnimation>(null);
-    // useEffect(simpleAnimationJS, []);
-    // useEffect(groupAnimations, []);
-    // useEffect(chainAnimations, []);
-    // useEffect(simpleAnimationReact, [animationRef.current]);
+    useEffect(simpleAnimationJS, []);
+    useEffect(groupAnimations, []);
+    useEffect(chainAnimations, []);
+    useEffect(simpleAnimationReact, [animationRef.current]);
     return (
         <div className="container">
             <div className="square-a">
@@ -30,12 +30,13 @@ const AnimationDemo: React.FC = () => {
             </CreateAnimation>
             <div className="square-b">
                 <p>Grouped animation 1</p>
+
             </div>
             <div ref={elCRef}>
                 <p>Grouped animation 2</p>
             </div>
             <MyComponent/>
-            {/*<MyModal/>*/}
+            <MyModal base64Data={""}/>
         </div>
     );
 
@@ -48,8 +49,8 @@ const AnimationDemo: React.FC = () => {
                 .direction('alternate')
                 .iterations(Infinity)
                 .keyframes([
-                    { offset: 0, transform: 'scale(3)', opacity: '1' },
-                    { offset: 0.5, transform: 'scale(1.5)', opacity: '1' },
+                    {offset: 0, transform: 'scale(3)', opacity: '1'},
+                    {offset: 0.5, transform: 'scale(1.5)', opacity: '1'},
                     {
                         offset: 1, transform: 'scale(0.5)', opacity: '0.2'
                     }
