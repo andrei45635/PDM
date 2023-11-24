@@ -48,11 +48,13 @@ export function usePhotos(id: string){
             const savedPhotoStr = await get(PHOTOS + id);
             const savedPhotos = (savedPhotoStr ? JSON.parse(savedPhotoStr) : []) as MyPhoto[];
             console.log('load photos', savedPhotos);
-            for(let photo of savedPhotos){
-                const data = await readFile(photo.filepath);
-                photo.webviewPath = `data:image/jpeg;base64,${data}`;
+            if(savedPhotos.length > 0){
+                for(let photo of savedPhotos){
+                    const data = await readFile(photo.filepath);
+                    photo.webviewPath = `data:image/jpeg;base64,${data}`;
+                }
+                setPhotos(savedPhotos);
             }
-            setPhotos(savedPhotos);
         }
     }
 }

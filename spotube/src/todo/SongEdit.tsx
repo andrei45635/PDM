@@ -21,7 +21,7 @@ import {useMyLocation} from "../hooks/useMyLocation";
 import MyMap from "../components/MapModal";
 
 import {MyPhoto, usePhotos} from "../hooks/usePhotos";
-import {camera, save, trash, unlink} from "ionicons/icons";
+import {camera, save, trash, trashBin, unlink} from "ionicons/icons";
 
 const log = getLogger('SongEdit');
 
@@ -39,11 +39,18 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
     const [liked, setLiked] = useState(false);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
+    const [photoBase64, setPhotoBase64] = useState("");
     const {photos, takePhoto, deletePhoto} = usePhotos(match.params.id || "");
     const [photoAction, setPhotoAction] = useState<MyPhoto | undefined>(undefined);
     const [song, setSong] = useState<SongProps | undefined>(undefined);
     const [mapVisible, setMapVisible] = useState(false);
+    const [showActionSheet, setShowActionSheet] = useState(false);
     const myLocation = useMyLocation();
+
+    useEffect(() => {
+        console.log("photoBase64 in useEffect:", photoBase64);
+    }, [photoBase64]);
+
 
     useEffect(() => {
         log('useEffect');
@@ -58,22 +65,24 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
             setLiked(song.liked);
             setLatitude(song.latitude);
             setLongitude(song.longitude);
-            //setPhotoBase64(song.photoBase64);
+            setPhotoBase64(song.photoBase64);
         }
+        console.log("SONG IN EDIT", song);
     }, [match.params.id, songs]);
 
     const handleSave = useCallback(() => {
-        const editedSong = song ? {...song, title, author, releaseDate, playCount, liked, latitude, longitude} : {
+        const editedSong = song ? {...song, title, author, releaseDate, playCount, liked, latitude, longitude, photoBase64} : {
             title,
             author,
             releaseDate,
             playCount,
             liked,
             latitude,
-            longitude
+            longitude,
+            photoBase64
         };
         saveSong && saveSong(editedSong).then(() => history.goBack());
-    }, [song, saveSong, title, author, releaseDate, playCount, liked, latitude, longitude, history]);
+    }, [song, saveSong, title, author, releaseDate, playCount, liked, latitude, longitude, photoBase64, history]);
     log('render');
     return (
         <IonPage>
@@ -127,15 +136,16 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                     <IonCheckbox checked={liked} onIonChange={e => setLiked(e.detail.checked)}/>
                 </div>
 
-                {latitude && longitude && (
+                {(
                     <MyMap lat={latitude} lng={longitude} onMapClick={({latitude, longitude}) => {
                         setLatitude(latitude);
                         setLongitude(longitude);
                     }} onMarkerClick={() => log("Map click")}
                     />
                 )}
-
-                {(
+                <IonButton onClick={() => setShowActionSheet(true)} expand="block">
+                    Show Action Sheet
+                </IonButton>
                     <>
                         <IonFabButton onClick={() => takePhoto()}>
                             <IonIcon icon={camera}></IonIcon>
@@ -153,7 +163,8 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                             </IonRow>
                         </IonGrid>
                         <IonActionSheet
-                            isOpen={!!photoAction}
+                            isOpen={showActionSheet}
+                            onDidDismiss={() => setShowActionSheet(false)}
                             buttons={[
                                 {
                                     // @ts-ignore
@@ -164,10 +175,14 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                                         const link = document.createElement("a");
                                         link.href = photoAction?.webviewPath ?? "";
                                         link.download = "image.png";
-                                        //link.setAttribute("download", "image.png");
                                         document.body.appendChild(link);
                                         link.click();
+                                        console.log("PHOTO BASE 64444444", photoAction?.webviewPath);
+                                        // setPhotoBase64(photoAction?.webviewPath!);
+
                                         localStorage.setItem("photo", photoAction?.webviewPath!);
+                                        setPhotoBase64(localStorage.getItem("photo")!);
+                                        console.log('setPhotoBase64', photoBase64);
                                         document.removeChild(link);
                                         setPhotoAction(undefined);
                                     }
@@ -189,10 +204,8 @@ const SongEdit: React.FC<SongEditProps> = ({history, match}) => {
                                     role: "cancel"
                                 }
                             ]}
-                            onDidDismiss={() => setPhotoAction(undefined)}
                         />
                     </>
-                )}
                 {mapVisible &&
                     <MyMap
                         lat={song?.latitude ?? 0}

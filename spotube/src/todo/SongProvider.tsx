@@ -100,7 +100,7 @@ export function sendSongs(token: string, networkStatus: any){
                 continue;
 
             const song = await localStorage.getItem(key!);
-            console.log("SONG IN sendSongs", song, JSON.parse(song!));
+            //console.log("SONG IN sendSongs", song, JSON.parse(song!));
             const songData = JSON.parse(song!);
             const decodedSong: SongProps = {
                 id: songData.id,
@@ -196,6 +196,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({children}) => {
             else {
                 const savedSong = await (song.id ? updateSong(token!, song) : createSong(localStorage.getItem("token")!, song));
                 log('saveSong succeeded');
+                console.log('song to be saved', song);
                 dispatch({type: SAVE_SONG_SUCCEEDED, payload: {song: savedSong}});
             }
         } catch (error) {

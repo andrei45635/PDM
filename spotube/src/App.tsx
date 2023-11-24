@@ -24,6 +24,7 @@ import './theme/variables.css';
 import {SongEdit, SongList} from "./todo";
 import {SongProvider} from "./todo/SongProvider";
 import { AuthProvider, Login, PrivateRoute } from './auth';
+import TestComponent from "./todo/TestComponent";
 
 setupIonicReact();
 

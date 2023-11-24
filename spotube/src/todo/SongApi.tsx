@@ -20,6 +20,7 @@ export const createSong: (token: string, song: SongProps) => Promise<SongProps[]
 }
 
 export const updateSong: (token: string, song: SongProps) => Promise<SongProps[]> = (token, song) => {
+  console.log('song to UPDATE', song);
   return withLogs(axios.put(`${songUrl}/${song.id}`, song, authConfig(token)), 'updateSong');
 }
 

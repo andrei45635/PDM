@@ -117,7 +117,7 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                 </IonRow>
                 {songs && songs.length > 0 && (
                     <IonList>
-                        {filterSongs(songs, titleFilter, authorFilter, likedFilter ?? false).map(({id, title, author, releaseDate, playCount, liked, latitude, longitude}) =>
+                        {filterSongs(songs, titleFilter, authorFilter, likedFilter ?? false).map(({id, title, author, releaseDate, playCount, liked, latitude, longitude, photoBase64}) =>
                             <Song
                                 key={id}
                                 id={id}
@@ -128,6 +128,7 @@ const SongList: React.FC<RouteComponentProps> = ({history}) => {
                                 liked={liked}
                                 latitude={latitude}
                                 longitude={longitude}
+                                photoBase64={photoBase64}
                                 onEdit={id => history.push(`/song/${id}`)}
                             />
                         )}

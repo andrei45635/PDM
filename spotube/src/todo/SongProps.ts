@@ -7,7 +7,7 @@ export interface SongProps {
     liked: boolean,
     latitude: number,
     longitude: number,
-    //photoBase64: string
+    photoBase64: string
 }
 
 export const defaultSong = {
