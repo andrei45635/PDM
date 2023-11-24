@@ -64,9 +64,16 @@ const SpotubeToolbar: React.FC = () => {
                     ref={animationRef}
                     duration={1000}
                     keyframes={[
-                        { offset: 0, transform: 'scale(1)', opacity: '1' },
-                        { offset: 0.5, transform: 'scale(1.2)', opacity: '0.8' },
-                        { offset: 1, transform: 'scale(1)', opacity: '1' },
+                        // { offset: 0, transform: 'scale(1)', opacity: '1' },
+                        // { offset: 0.5, transform: 'scale(1.2)', opacity: '0.8' },
+                        // { offset: 1, transform: 'scale(1)', opacity: '1' },
+                        { offset: 0, color: '#ff0000' },   // Red
+                        { offset: 0.16, color: '#ff9900' }, // Orange
+                        { offset: 0.33, color: '#ffff00' }, // Yellow
+                        { offset: 0.5, color: '#00ff00' },  // Green
+                        { offset: 0.66, color: '#0000ff' }, // Blue
+                        { offset: 0.83, color: '#4b0082' }, // Indigo
+                        { offset: 1, color: '#9400d3' },    // Violet
                     ]}
                     iterations={Infinity}
                     easing="ease-in-out"

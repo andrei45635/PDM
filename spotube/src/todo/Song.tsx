@@ -74,49 +74,47 @@ const Song: React.FC<SongPropsExt> = ({ id, title, author, releaseDate, playCoun
     };
     return (
         <>
-            {/*onClick={() => onEdit(id)}*/}
-        <IonItem className="song" >
-        <IonLabel>
-            { (
-                <IonImg
-                    // src={photos[0]?.webviewPath || ""}
-                    src={"data:image/jpeg;base64," + photoBase64 || ""}
-                    style={{
-                        width: "150px",
-                        height: "150px",
-                        objectFit: "cover",
-                        marginRight: "10px",
-                    }}
-                />
-            )}
-            <div onClick={() => onEdit(id)}>
-                <CreateAnimation
-                    ref={animationRef}
-                    duration={1000}
-                    keyframes={[
-                        { offset: 0, opacity: '0' },
-                        { offset: 0.5, opacity: '1' },
-                        { offset: 1, opacity: '0' },
-                    ]}
-                    iterations={Infinity}
-                    easing="ease-in-out"
-                >
-                    <h2 style={{ display: 'inline-block', paddingLeft: '1px' }}>{title}</h2>
-                </CreateAnimation>
-                <p>{`Author: ${author}`}</p>
-                <p>{`Release Date: ${releaseDate}`}</p>
-                <p>{`Play Count: ${playCount}`}</p>
-                <p>{`Liked: ${liked ? 'True' : 'False'}`}</p>
-            </div>
-        </IonLabel>
-            <IonButton onClick={handleMapClick}>View Map</IonButton>
-            { mapVisible &&
-                <div style={{ height: '400px', width: '100%' }}>
-                    <MyMap lat={latitude ?? 0} lng={longitude ?? 0} onMapClick={handleMapClick} onMarkerClick={handleMapClick} />
+            <IonItem className="song">
+                <div style={{ borderRadius: '10px', overflow: 'hidden' }}>
+                    <IonImg
+                        src={'data:image/jpeg;base64,' + photoBase64 || ''}
+                        style={{
+                            width: '100px', // Adjust the width as needed
+                            height: '100px', // Adjust the height as needed
+                            objectFit: 'cover',
+                            margin: '0 10px'
+                        }}
+                    />
                 </div>
-            }
-            <MyModal base64Data={photoBase64 || "undefined"}/>
-        </IonItem>
+                <IonLabel>
+                    <div onClick={() => onEdit(id)}>
+                        <CreateAnimation
+                            ref={animationRef}
+                            duration={1000}
+                            keyframes={[
+                                { offset: 0, opacity: '0' },
+                                { offset: 0.5, opacity: '1' },
+                                { offset: 1, opacity: '0' },
+                            ]}
+                            iterations={Infinity}
+                            easing="ease-in-out"
+                        >
+                            <h2 style={{ display: 'inline-block', paddingLeft: '1px' }}>{title}</h2>
+                        </CreateAnimation>
+                        <p>{`Author: ${author}`}</p>
+                        <p>{`Release Date: ${releaseDate}`}</p>
+                        <p>{`Play Count: ${playCount}`}</p>
+                        <p>{`Liked: ${liked ? 'True' : 'False'}`}</p>
+                    </div>
+                </IonLabel>
+                <IonButton onClick={handleMapClick}>View Map</IonButton>
+                {mapVisible && (
+                    <div style={{ height: '400px', width: '100%' }}>
+                        <MyMap lat={latitude ?? 0} lng={longitude ?? 0} onMapClick={handleMapClick} onMarkerClick={handleMapClick} />
+                    </div>
+                )}
+                <MyModal base64Data={photoBase64 || 'undefined'} />
+            </IonItem>
         </>
     );
 };
